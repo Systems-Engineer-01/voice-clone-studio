@@ -1,0 +1,15 @@
+# ──────────────────────────────────────────────
+# Voice Clone Studio — Requirements
+# Python 3.10+ | Coqui TTS (XTTS-v2)
+# ──────────────────────────────────────────────
+
+# Core — Coqui TTS (includes XTTS-v2 model support)
+TTS>=0.22.0
+
+# PyTorch ecosystem
+torch>=2.1.0
+torchaudio>=2.1.0
+
+# Audio processing
+pydub>=0.25.1
+soundfile>=0.12.1

@@ -1,0 +1,61 @@
+# ──────────────────────────────────────────────────────
+# .gitignore — Voice Clone Studio
+# Python + venv + large audio/model files
+# ──────────────────────────────────────────────────────
+
+# ─── Python ───────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# ─── Virtual Environments ─────────────────────────────
+venv/
+.venv/
+env/
+.env/
+ENV/
+
+# ─── Audio files (keep .gitkeep, ignore media) ───────
+audio_samples/*.wav
+audio_samples/*.mp3
+audio_samples/*.flac
+audio_samples/*.ogg
+audio_samples/*.m4a
+
+output/*.wav
+output/*.mp3
+output/*.flac
+output/*.ogg
+output/*.m4a
+
+# ─── TTS / Model cache ───────────────────────────────
+# Coqui TTS downloads models to these locations
+.local/
+models/
+*.pth
+*.ckpt
+*.bin
+
+# ─── IDE & OS ─────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── Jupyter Notebooks checkpoints ───────────────────
+.ipynb_checkpoints/
+
+# ─── Logs & temp ─────────────────────────────────────
+*.log
+tmp/
+temp/
