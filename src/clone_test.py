@@ -47,7 +47,7 @@ LANGUAGE = "es"
 # ──────────────────────────────────────────────────────────────
 
 def main():
-    print("\n🎙️  Voice Clone Studio — Prueba de Concepto")
+    print("\n[INFO] Voice Clone Studio — Prueba de Concepto")
     print("─" * 60)
 
     # Paso 1: Convertir MP4 a WAV combinado
@@ -55,7 +55,7 @@ def main():
         print("\nPASO 1:")
         wav_path = convert_mp4_to_wav(MP4_FILES, SPEAKER_WAV)
     except (FileNotFoundError, RuntimeError) as e:
-        print(f"\n❌ {e}")
+        print(f"\n[ERROR] {e}")
         sys.exit(1)
 
     # Paso 2: Sintetizar con XTTS-v2
@@ -66,20 +66,20 @@ def main():
 
         engine = VoiceEngine(speaker_wav=wav_path, language=LANGUAGE)
 
-        print(f"🎤 Sintetizando texto en '{LANGUAGE}':")
+        print(f"[INFO] Sintetizando texto en '{LANGUAGE}':")
         print(f'   "{TEXT}"\n')
 
         result = engine.synthesize(text=TEXT, output_path=OUTPUT_FILE)
     except (FileNotFoundError, RuntimeError) as e:
-        print(f"\n❌ {e}")
+        print(f"\n[ERROR] {e}")
         sys.exit(1)
 
     # Resumen final
     size_kb = result.stat().st_size / 1024
-    print(f"\n✅ Audio generado: {result} ({size_kb:.1f} KB)")
+    print(f"\n[EXITO] Audio generado: {result} ({size_kb:.1f} KB)")
 
     print("\n" + "=" * 60)
-    print("🎉 ¡COMPLETADO!")
+    print("[EXITO] ¡COMPLETADO!")
     print("=" * 60)
     print(f"   Referencia de voz : {SPEAKER_WAV}")
     print(f"   Audio generado    : {result}")

@@ -47,7 +47,7 @@ def join_audio_fragments(
     """
     from pydub import AudioSegment
 
-    print(f"\n🎧 Uniendo {len(fragment_paths)} fragmentos...")
+    print(f"\n[INFO] Uniendo {len(fragment_paths)} fragmentos...")
     print(f"   Silencio entre fragmentos: {silence_ms} ms")
 
     # Crear segmento de silencio
@@ -79,7 +79,7 @@ def join_audio_fragments(
     # Estadísticas
     duration_sec = len(combined) / 1000.0
     size_mb = output_path.stat().st_size / (1024 * 1024)
-    print(f"\n✅ Audio final generado: {output_path}")
+    print(f"\n[EXITO] Audio final generado: {output_path}")
     print(f"   Duración: {duration_sec / 60:.1f} min ({duration_sec:.1f} s)")
     print(f"   Tamaño: {size_mb:.2f} MB")
 
@@ -103,16 +103,16 @@ def run_pipeline(
     Orquesta el flujo completo de generación de narración.
     """
     print("\n" + "=" * 60)
-    print("🎙️  Voice Clone Studio — Generador de Narración")
+    print("[INFO] Voice Clone Studio — Generador de Narración")
     print("=" * 60)
 
     # 1. Verificar inputs
     if not input_script.exists():
-        print(f"\n❌ ERROR: No se encontró el guion: {input_script}")
+        print(f"\n[ERROR] No se encontró el guion: {input_script}")
         sys.exit(1)
         
     if not speaker_wav.exists():
-        print(f"\n❌ ERROR: No se encontró la voz de referencia: {speaker_wav}")
+        print(f"\n[ERROR] No se encontró la voz de referencia: {speaker_wav}")
         print("   Asegúrate de haber ejecutado el Sprint 1 primero o especifica")
         print("   una ruta válida con --speaker.")
         sys.exit(1)
@@ -125,19 +125,19 @@ def run_pipeline(
     fragments = process_script(input_script, json_path, max_chars)
     
     if not fragments:
-        print("\n❌ ERROR: El guion está vacío o no se pudieron generar fragmentos.")
+        print("\n[ERROR] El guion está vacío o no se pudieron generar fragmentos.")
         sys.exit(1)
 
     # 3. Inicializar Motor de Voz y Sintetizar
     try:
         print("\n" + "=" * 60)
-        print("🤖 Inicializando Motor de Voz...")
+        print("[INFO] Inicializando Motor de Voz...")
         print("=" * 60)
         
         engine = VoiceEngine(speaker_wav=speaker_wav, language=language)
         
         print("\n" + "=" * 60)
-        print(f"🎤 Sintetizando {len(fragments)} fragmentos...")
+        print(f"[INFO] Sintetizando {len(fragments)} fragmentos...")
         print("=" * 60)
         
         # Limpiar/crear directorio temporal
@@ -149,13 +149,13 @@ def run_pipeline(
         fragment_wavs = engine.synthesize_batch(fragments, TEMP_DIR)
         
     except Exception as e:
-        print(f"\n❌ ERROR durante la síntesis: {e}")
+        print(f"\n[ERROR] durante la síntesis: {e}")
         sys.exit(1)
 
     # 4. Unir y Exportar
     try:
         print("\n" + "=" * 60)
-        print("🎬 Ensamblando Narración Final...")
+        print("[INFO] Ensamblando Narración Final...")
         print("=" * 60)
         
         result = join_audio_fragments(
@@ -165,15 +165,15 @@ def run_pipeline(
             export_format=export_format,
         )
     except Exception as e:
-        print(f"\n❌ ERROR al ensamblar el audio: {e}")
+        print(f"\n[ERROR] al ensamblar el audio: {e}")
         sys.exit(1)
 
     # 5. Limpieza
-    print("\n🧹 Limpiando archivos temporales...")
+    print("\n[INFO] Limpiando archivos temporales...")
     shutil.rmtree(TEMP_DIR, ignore_errors=True)
 
     print("\n" + "=" * 60)
-    print("🎉 ¡NARRACIÓN COMPLETADA CON ÉXITO!")
+    print("[EXITO] ¡NARRACIÓN COMPLETADA CON ÉXITO!")
     print("=" * 60)
     print(f"   Guion original : {input_script.name}")
     print(f"   Voz de ref.    : {speaker_wav.name}")

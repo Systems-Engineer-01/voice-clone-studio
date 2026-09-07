@@ -187,14 +187,21 @@ El resultado se guarda en `output/fragments.json` con esta estructura:
 
 ### Interfaz Web (Gradio)
 
-Puedes usar la aplicación web para realizar todo el proceso visualmente: subir tu audio de referencia, escribir el texto, configurar parámetros y generar/descargar la narración resultante.
+Puedes usar la aplicación web para realizar todo el proceso visualmente: subir tu audio de referencia (o grabar directamente desde el micrófono), subir tu guion en formato `.txt`, configurar parámetros y generar/descargar la narración resultante.
 
 Para lanzar la interfaz:
 
 ```bash
 python app.py
 ```
-Abre tu navegador en `http://localhost:7860`.
+Abre tu navegador en `http://127.0.0.1:7860`.
+
+**Uso de la UI:**
+1. **Sube** o arrastra tu archivo de audio de referencia `.wav` o `.mp4` en la columna izquierda.
+2. **Escribe** tu texto o **Sube** un archivo `.txt` con tu guion en la columna derecha.
+3. **Ajusta** los parámetros si lo deseas (idioma, silencios).
+4. **Haz clic** en "Generar Narración".
+5. Una vez que termine, podrás **reproducir** o **descargar** el audio final desde el reproductor integrado.
 
 ---
 
@@ -231,5 +238,14 @@ El resultado final se guardará en `output/narracion_final.wav` (o `.mp3`).
 
 ## 📄 Licencia
 
-Este proyecto es de uso personal/educativo. Consulta la licencia de
-[Coqui TTS](https://github.com/coqui-ai/TTS) para restricciones del modelo.
+El código fuente de este proyecto se distribuye bajo la licencia **MIT** (ver archivo `LICENSE`). Esto permite el uso libre del código para cualquier propósito.
+
+Sin embargo, **el modelo XTTS-v2 de Coqui** (que se descarga y utiliza internamente por este software) está sujeto a la **Coqui Public Model License (CPML)**. Esta licencia restringe su uso a **fines no comerciales**. Para más información sobre las restricciones del modelo, revisa la [página oficial de Coqui TTS](https://github.com/coqui-ai/TTS) y la licencia CPML.
+
+---
+
+## ⚠️ Limitaciones Conocidas
+
+- **Tiempos de Síntesis:** Sin una GPU dedicada y aceleración por hardware (CUDA), la síntesis de audio puede ser considerablemente lenta y tardar varios minutos por cada bloque de texto.
+- **Modelo Multilingüe:** A pesar de que el modelo soporta múltiples idiomas y acentos, la calidad de la clonación dependerá casi exclusivamente de la calidad y limpieza del audio de referencia. El ruido de fondo, ecos o interferencias degradarán la calidad del resultado.
+- **Límites de Fragmentación:** El TTS tiende a ser inestable o devorar sílabas con oraciones excesivamente largas, por lo que el `script_processor.py` fragmenta el texto (recomendado: 250 caracteres máximo).
