@@ -33,6 +33,7 @@ output/*.mp3
 output/*.flac
 output/*.ogg
 output/*.m4a
+output/*.json
 
 # ─── TTS / Model cache ───────────────────────────────
 # Coqui TTS downloads models to these locations

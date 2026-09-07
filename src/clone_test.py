@@ -136,6 +136,11 @@ def synthesize_voice(
     else:
         print(" (será más lento que con GPU)")
 
+    # Monkeypatch torch.load for PyTorch 2.6+ weights_only default
+    if hasattr(torch, "load"):
+        _orig_load = torch.load
+        torch.load = lambda *args, **kwargs: _orig_load(*args, **{**kwargs, "weights_only": False})
+
     # Cargar modelo (se descarga automáticamente si no existe)
     print(f"\n📦 Cargando modelo: {MODEL_NAME}")
     print("   (La primera ejecución descarga ~1.8 GB, por favor espera...)\n")

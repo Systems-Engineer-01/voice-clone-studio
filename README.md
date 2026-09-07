@@ -64,17 +64,20 @@ pip install -r requirements.txt
 
 ```
 voice-clone-studio/
-├── audio_samples/      # Muestras de audio de la voz a clonar
-│   ├── prueba1.mp4     #   ← Coloca aquí tus 4 muestras
+├── audio_samples/          # Muestras de audio de la voz a clonar
+│   ├── prueba1.mp4         #   ← Coloca aquí tus 4 muestras
 │   ├── prueba2.mp4
 │   ├── prueba3.mp4
 │   └── prueba4.mp4
-├── scripts/            # Scripts utilitarios (preprocesamiento, conversión, etc.)
-├── output/             # Audio generado por el modelo
-│   └── prueba_1.wav    #   ← Resultado de la clonación
-├── src/                # Código fuente principal del pipeline
+├── scripts/                # Guiones de texto para sintetizar
+│   └── ejemplo.txt         #   ← Guion de ejemplo incluido
+├── output/                 # Archivos generados
+│   ├── prueba_1.wav        #   ← Audio clonado
+│   └── fragments.json      #   ← Fragmentos procesados
+├── src/                    # Código fuente principal
 │   ├── __init__.py
-│   └── clone_test.py   # Prueba de concepto XTTS-v2
+│   ├── clone_test.py       # Sprint 1: Clonación de voz
+│   └── script_processor.py # Sprint 2: Procesador de guiones
 ├── .gitignore
 ├── README.md
 └── requirements.txt
@@ -140,12 +143,44 @@ xdg-open output/prueba_1.wav
 
 ---
 
+### Procesador de guiones
+
+Divide textos largos en fragmentos óptimos para síntesis TTS (máx. 250 caracteres
+por fragmento, respetando límites de oración).
+
+```bash
+# Procesar el guion de ejemplo
+python -m src.script_processor scripts/ejemplo.txt
+
+# Personalizar máximo de caracteres
+python -m src.script_processor scripts/ejemplo.txt --max-chars 200
+
+# Especificar archivo de salida
+python -m src.script_processor scripts/mi_guion.txt --output output/mi_guion.json
+```
+
+El resultado se guarda en `output/fragments.json` con esta estructura:
+
+```json
+{
+  "source_file": "ejemplo.txt",
+  "max_chars": 250,
+  "total_fragments": 9,
+  "fragments": [
+    {"index": 1, "text": "Bienvenidos al podcast...", "chars": 192},
+    ...
+  ]
+}
+```
+
+---
+
 ## 🗺️ Roadmap
 
 - [x] **Sprint 0** — Setup inicial del proyecto
 - [x] **Sprint 1** — Prueba de concepto de clonación de voz (XTTS-v2)
-- [ ] **Sprint 2** — CLI interactivo y parámetros configurables
-- [ ] **Sprint 3** — Exportación multi-formato y post-procesamiento
+- [x] **Sprint 2** — Procesamiento de guiones (fragmentación para TTS)
+- [ ] **Sprint 3** — Pipeline completo (guion → voz clonada)
 - [ ] **Sprint 4** — Interfaz web (Gradio/Streamlit)
 
 ---
