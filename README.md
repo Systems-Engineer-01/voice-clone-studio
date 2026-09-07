@@ -65,10 +65,16 @@ pip install -r requirements.txt
 ```
 voice-clone-studio/
 ├── audio_samples/      # Muestras de audio de la voz a clonar
+│   ├── prueba1.mp4     #   ← Coloca aquí tus 4 muestras
+│   ├── prueba2.mp4
+│   ├── prueba3.mp4
+│   └── prueba4.mp4
 ├── scripts/            # Scripts utilitarios (preprocesamiento, conversión, etc.)
 ├── output/             # Audio generado por el modelo
+│   └── prueba_1.wav    #   ← Resultado de la clonación
 ├── src/                # Código fuente principal del pipeline
-│   └── __init__.py
+│   ├── __init__.py
+│   └── clone_test.py   # Prueba de concepto XTTS-v2
 ├── .gitignore
 ├── README.md
 └── requirements.txt
@@ -78,12 +84,58 @@ voice-clone-studio/
 
 ## ▶️ Uso
 
-> 🚧 **En construcción** — El pipeline de clonación se implementará en los
-> próximos sprints.
+### Prueba de concepto — Clonación de voz
+
+#### 1. Preparar muestras de audio
+
+Coloca 4 archivos MP4 con muestras de tu voz en `audio_samples/`:
+
+```
+audio_samples/
+├── prueba1.mp4
+├── prueba2.mp4
+├── prueba3.mp4
+└── prueba4.mp4
+```
+
+> 💡 **Tip:** Grabaciones de 10-30 segundos cada una, con voz clara y sin ruido
+> de fondo, producen los mejores resultados.
+
+#### 2. Activar el entorno virtual e instalar dependencias
 
 ```bash
-# Placeholder: ejecutar el pipeline principal
-python -m src.main --input audio_samples/mi_muestra.wav --text "Hola mundo"
+# Windows
+venv\Scripts\activate
+pip install -r requirements.txt
+
+# macOS/Linux
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+#### 3. Ejecutar el script de clonación
+
+```bash
+python -m src.clone_test
+```
+
+El script automáticamente:
+1. **Convierte** los 4 MP4 → un único `audio_samples/mi_voz.wav` (mono, 22050 Hz)
+2. **Descarga** el modelo XTTS-v2 (~1.8 GB, solo la primera vez)
+3. **Sintetiza** el texto *"Hola, esta es una prueba de mi voz clonada"* en español
+4. **Guarda** el resultado en `output/prueba_1.wav`
+
+#### 4. Reproducir el resultado
+
+```bash
+# Windows
+start output\prueba_1.wav
+
+# macOS
+open output/prueba_1.wav
+
+# Linux
+xdg-open output/prueba_1.wav
 ```
 
 ---
@@ -91,9 +143,9 @@ python -m src.main --input audio_samples/mi_muestra.wav --text "Hola mundo"
 ## 🗺️ Roadmap
 
 - [x] **Sprint 0** — Setup inicial del proyecto
-- [ ] **Sprint 1** — Módulo de carga y validación de audio
-- [ ] **Sprint 2** — Integración con XTTS-v2 para síntesis
-- [ ] **Sprint 3** — CLI interactivo y exportación de resultados
+- [x] **Sprint 1** — Prueba de concepto de clonación de voz (XTTS-v2)
+- [ ] **Sprint 2** — CLI interactivo y parámetros configurables
+- [ ] **Sprint 3** — Exportación multi-formato y post-procesamiento
 - [ ] **Sprint 4** — Interfaz web (Gradio/Streamlit)
 
 ---
