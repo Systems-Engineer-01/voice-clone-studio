@@ -158,6 +158,9 @@ class VoiceEngine:
         text: str,
         output_path: str | Path,
         language: str | None = None,
+        temperature: float = 0.7,
+        speed: float = 1.0,
+        repetition_penalty: float = 2.0,
     ) -> Path:
         """
         Sintetiza un texto y lo guarda como WAV.
@@ -166,6 +169,9 @@ class VoiceEngine:
             text: Texto a sintetizar.
             output_path: Ruta de salida para el archivo WAV.
             language: Idioma (usa el del constructor si no se especifica).
+            temperature: Variabilidad de la voz generada (default 0.7).
+            speed: Velocidad del habla (default 1.0).
+            repetition_penalty: Penalización por repetición (default 2.0).
 
         Returns:
             Path al archivo generado.
@@ -182,6 +188,9 @@ class VoiceEngine:
                 speaker_wav=str(self.speaker_wav),
                 language=lang,
                 split_sentences=True,
+                temperature=temperature,
+                speed=speed,
+                repetition_penalty=repetition_penalty,
             )
         except Exception as e:
             raise RuntimeError(f"Error durante la síntesis: {e}") from e
@@ -200,6 +209,9 @@ class VoiceEngine:
         output_dir: str | Path,
         prefix: str = "frag",
         language: str | None = None,
+        temperature: float = 0.7,
+        speed: float = 1.0,
+        repetition_penalty: float = 2.0,
     ) -> list[Path]:
         """
         Sintetiza múltiples fragmentos de texto, generando un WAV
@@ -210,6 +222,9 @@ class VoiceEngine:
             output_dir: Directorio donde guardar los WAVs.
             prefix: Prefijo para los nombres de archivo.
             language: Idioma (usa el del constructor si no se especifica).
+            temperature: Variabilidad de la voz generada (default 0.7).
+            speed: Velocidad del habla (default 1.0).
+            repetition_penalty: Penalización por repetición (default 2.0).
 
         Returns:
             Lista de Paths a los archivos generados.
@@ -225,7 +240,7 @@ class VoiceEngine:
             preview = text[:60] + "..." if len(text) > 60 else text
             print(f"   [{i:02d}/{total:02d}] \"{preview}\"")
 
-            self.synthesize(text, output_path, language)
+            self.synthesize(text, output_path, language, temperature, speed, repetition_penalty)
 
             size_kb = output_path.stat().st_size / 1024
             print(f"           → {output_path.name} ({size_kb:.0f} KB)")

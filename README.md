@@ -199,9 +199,25 @@ Abre tu navegador en `http://127.0.0.1:7860`.
 **Uso de la UI:**
 1. **Sube** o arrastra tu archivo de audio de referencia `.wav` o `.mp4` en la columna izquierda.
 2. **Escribe** tu texto o **Sube** un archivo `.txt` con tu guion en la columna derecha.
-3. **Ajusta** los parámetros si lo deseas (idioma, silencios).
-4. **Haz clic** en "Generar Narración".
-5. Una vez que termine, podrás **reproducir** o **descargar** el audio final desde el reproductor integrado.
+3. **Ajusta** los parámetros básicos si lo deseas (idioma, silencios).
+4. Opcionalmente, despliega el panel **Configuración avanzada** para afinar la voz (ver detalles abajo).
+5. **Haz clic** en "Generar Narración".
+6. Una vez que termine, podrás **reproducir** o **descargar** el audio final desde el reproductor integrado.
+
+### Configuración Avanzada
+
+La interfaz web (y el motor internamente) soportan parámetros avanzados para controlar la naturalidad y cadencia de la voz clonada:
+
+- **Temperature (Variabilidad)**:
+  - Rango: 0.1 a 1.0 (Por defecto: 0.7).
+  - Valores bajos (0.1 - 0.4): Generan una voz más estable, determinista y "plana". Útil si el modelo pronuncia mal ciertas palabras.
+  - Valores altos (0.7 - 0.9): Generan voces más expresivas, emotivas y con entonaciones dinámicas. Aumenta el riesgo de pequeñas variaciones en la pronunciación o tono.
+- **Velocidad de habla (Speed)**:
+  - Rango: 0.5 a 1.5 (Por defecto: 1.0).
+  - Menos de 1.0 hará que hable más lento, más de 1.0 más rápido.
+- **Repetition penalty**:
+  - Rango: 1.0 a 10.0 (Por defecto: 2.0).
+  - Evita que el modelo repita muletillas, ruidos respiratorios o suene monótono. Un valor de 2.0 a 3.0 suele ser ideal. Valores muy altos pueden degradar la calidad.
 
 ---
 

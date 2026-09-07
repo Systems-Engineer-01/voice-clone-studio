@@ -16,7 +16,7 @@ from src.script_processor import clean_text, split_into_fragments, DEFAULT_MAX_C
 from src.voice_engine import VoiceEngine
 from src.generate_narration import join_audio_fragments
 
-def process_and_synthesize(speaker_audio, script_text, silence_ms, max_chars, language):
+def process_and_synthesize(speaker_audio, script_text, silence_ms, max_chars, language, temperature, speed, repetition_penalty):
     """
     Función principal de Gradio para procesar el texto y generar la narración.
     """
@@ -48,7 +48,10 @@ def process_and_synthesize(speaker_audio, script_text, silence_ms, max_chars, la
         fragment_wavs = engine.synthesize_batch(
             fragments=fragments,
             output_dir=temp_dir,
-            language=language
+            language=language,
+            temperature=float(temperature),
+            speed=float(speed),
+            repetition_penalty=float(repetition_penalty)
         )
         
         # 5. Unir audios
@@ -109,6 +112,30 @@ with gr.Blocks(title="Voice Clone Studio", theme=gr.themes.Soft()) as app:
                 label="Idioma"
             )
             
+            with gr.Accordion("Configuración avanzada", open=False):
+                temp_input = gr.Slider(
+                    minimum=0.1, maximum=1.0, value=0.7, step=0.05,
+                    label="Temperature (variabilidad)"
+                )
+                speed_input = gr.Slider(
+                    minimum=0.5, maximum=1.5, value=1.0, step=0.05,
+                    label="Velocidad de habla (speed)"
+                )
+                rep_pen_input = gr.Slider(
+                    minimum=1.0, maximum=10.0, value=2.0, step=0.5,
+                    label="Repetition penalty (evita monotonía)"
+                )
+                reset_btn = gr.Button("Restaurar valores por defecto", size="sm")
+                
+                def reset_advanced_config():
+                    return 0.7, 1.0, 2.0
+                
+                reset_btn.click(
+                    fn=reset_advanced_config,
+                    inputs=[],
+                    outputs=[temp_input, speed_input, rep_pen_input]
+                )
+            
             generate_btn = gr.Button(" Generar Narración", variant="primary")
 
         with gr.Column(scale=2):
@@ -152,7 +179,7 @@ with gr.Blocks(title="Voice Clone Studio", theme=gr.themes.Soft()) as app:
     # Evento
     generate_btn.click(
         fn=process_and_synthesize,
-        inputs=[speaker_input, script_input, silence_input, max_chars_input, language_input],
+        inputs=[speaker_input, script_input, silence_input, max_chars_input, language_input, temp_input, speed_input, rep_pen_input],
         outputs=[audio_output],
         api_name="synthesize"
     )
