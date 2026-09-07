@@ -2,7 +2,15 @@ import gradio as gr
 import os
 import shutil
 import tempfile
+import sys
+import io
 from pathlib import Path
+
+# Forzar UTF-8 en stdout/stderr para evitar errores con emojis en Windows
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+if sys.stderr.encoding != 'utf-8':
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 from src.script_processor import clean_text, split_into_fragments, DEFAULT_MAX_CHARS
 from src.voice_engine import VoiceEngine
@@ -101,14 +109,37 @@ with gr.Blocks(title="Voice Clone Studio", theme=gr.themes.Soft()) as app:
                 label="Idioma"
             )
             
-            generate_btn = gr.Button("🚀 Generar Narración", variant="primary")
+            generate_btn = gr.Button(" Generar Narración", variant="primary")
 
         with gr.Column(scale=2):
             gr.Markdown("### 2. Guion a Narrar")
+            
+            script_upload = gr.File(
+                label="Sube un archivo de texto (.txt) con el guion (Opcional)",
+                file_types=[".txt"],
+            )
+            
             script_input = gr.Textbox(
-                label="Escribe o pega el texto aquí...",
-                lines=15,
+                label="O escribe o pega el texto aquí...",
+                lines=12,
                 placeholder="Hola, esta es una prueba de mi voz clonada en la nueva interfaz web."
+            )
+            
+            def load_script_file(file_obj):
+                if file_obj is None:
+                    return ""
+                try:
+                    # En Gradio 3.x file_obj tiene el atributo 'name' para la ruta
+                    file_path = file_obj.name
+                    with open(file_path, "r", encoding="utf-8") as f:
+                        return f.read()
+                except Exception as e:
+                    return f"Error leyendo el archivo: {e}"
+                    
+            script_upload.change(
+                fn=load_script_file,
+                inputs=[script_upload],
+                outputs=[script_input]
             )
             
             gr.Markdown("### 4. Resultado")
@@ -127,4 +158,4 @@ with gr.Blocks(title="Voice Clone Studio", theme=gr.themes.Soft()) as app:
     )
 
 if __name__ == "__main__":
-    app.launch(server_name="0.0.0.0", server_port=7860, share=False)
+    app.launch(server_name="127.0.0.1", server_port=7860, share=False)

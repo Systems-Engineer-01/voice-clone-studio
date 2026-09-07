@@ -238,25 +238,25 @@ def process_script(
     Pipeline completo: leer → limpiar → fragmentar → guardar JSON.
     """
     print("=" * 60)
-    print("📝 Procesador de Guiones — Voice Clone Studio")
+    print("[Procesador] Procesador de Guiones — Voice Clone Studio")
     print("=" * 60)
 
     # Leer archivo
     if not input_path.exists():
-        print(f"\n❌ ERROR: No se encontró el archivo: {input_path}")
+        print(f"\n[ERROR] No se encontró el archivo: {input_path}")
         sys.exit(1)
 
-    print(f"\n📂 Leyendo: {input_path}")
+    print(f"\n[INFO] Leyendo: {input_path}")
     raw_text = input_path.read_text(encoding="utf-8")
     print(f"   Caracteres originales: {len(raw_text):,}")
 
     # Limpiar
-    print("\n🧹 Limpiando texto...")
+    print("\n[INFO] Limpiando texto...")
     cleaned = clean_text(raw_text)
     print(f"   Caracteres tras limpieza: {len(cleaned):,}")
 
     # Fragmentar
-    print(f"\n✂️  Dividiendo en fragmentos (máx. {max_chars} caracteres)...")
+    print(f"\n[INFO] Dividiendo en fragmentos (máx. {max_chars} caracteres)...")
     fragments = split_into_fragments(cleaned, max_chars)
 
     # Estadísticas
@@ -286,11 +286,11 @@ def process_script(
         json.dumps(output_data, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
-    print(f"\n💾 Guardado en: {output_path}")
+    print(f"\n[INFO] Guardado en: {output_path}")
 
     # Mostrar preview
-    print("\n📋 Preview de fragmentos:")
-    print("─" * 60)
+    print("\n[PREVIEW] Preview de fragmentos:")
+    print("-" * 60)
     for i, frag in enumerate(fragments[:5], start=1):
         preview = frag[:80] + "..." if len(frag) > 80 else frag
         print(f"   [{i:02d}] ({len(frag):3d} chars) {preview}")
@@ -298,7 +298,7 @@ def process_script(
         print(f"   ... y {len(fragments) - 5} fragmentos más")
 
     print("\n" + "=" * 60)
-    print(f"✅ ¡Listo! {len(fragments)} fragmentos guardados en {output_path}")
+    print(f"[EXITO] ¡Listo! {len(fragments)} fragmentos guardados en {output_path}")
     print("=" * 60 + "\n")
 
     return fragments

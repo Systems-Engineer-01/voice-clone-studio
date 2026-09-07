@@ -14,6 +14,7 @@ Uso como módulo:
 """
 
 import sys
+import traceback
 from pathlib import Path
 
 # ──────────────────────────────────────────────────────────────
@@ -44,7 +45,7 @@ def convert_mp4_to_wav(mp4_files: list[Path], output_wav: Path) -> Path:
     # Verificar que todos los MP4 existen
     missing = [f for f in mp4_files if not f.exists()]
     if missing:
-        print("\n❌ ERROR: No se encontraron los siguientes archivos:")
+        print("\n[ERROR] No se encontraron los siguientes archivos:")
         for f in missing:
             print(f"   • {f}")
         raise FileNotFoundError(
@@ -53,11 +54,11 @@ def convert_mp4_to_wav(mp4_files: list[Path], output_wav: Path) -> Path:
         )
 
     # Concatenar todos los audios
-    print(f"\n📂 Cargando {len(mp4_files)} archivos de audio...")
+    print(f"\n[INFO] Cargando {len(mp4_files)} archivos de audio...")
     combined = AudioSegment.empty()
 
     for mp4_path in mp4_files:
-        print(f"   ✓ {mp4_path.name}")
+        print(f"   - {mp4_path.name}")
         try:
             segment = AudioSegment.from_file(str(mp4_path), format="mp4")
             combined += segment
@@ -75,7 +76,7 @@ def convert_mp4_to_wav(mp4_files: list[Path], output_wav: Path) -> Path:
 
     duration_sec = len(combined) / 1000.0
     size_mb = output_wav.stat().st_size / (1024 * 1024)
-    print(f"\n✅ WAV generado: {output_wav}")
+    print(f"\n[EXITO] WAV generado: {output_wav}")
     print(f"   Duración: {duration_sec:.1f}s | Tamaño: {size_mb:.2f} MB")
     print(f"   Formato: mono, 22050 Hz, 16-bit PCM")
 
@@ -127,21 +128,22 @@ class VoiceEngine:
         else:
             self.device = device
 
-        print(f"\n🖥️  Dispositivo: {self.device.upper()}", end="")
+        print(f"\nDispositivo: {self.device.upper()}", end="")
         if self.device == "cuda":
             print(f" ({torch.cuda.get_device_name(0)})")
         else:
-            print(" (será más lento que con GPU)")
+            print(" (sera mas lento que con GPU)")
 
         # Cargar modelo
-        print(f"\n📦 Cargando modelo: {MODEL_NAME}")
-        print("   (La primera ejecución descarga ~1.8 GB, por favor espera...)\n")
+        print(f"\nCargando modelo: {MODEL_NAME}")
+        print("   (La primera ejecucion descarga ~1.8 GB, por favor espera...)\n")
 
         try:
             self._tts = TTS(MODEL_NAME).to(self.device)
         except Exception as e:
+            tb = traceback.format_exc()
             raise RuntimeError(
-                f"Error al cargar el modelo: {e}\n"
+                f"Error al cargar el modelo: {e}\nTraceback:\n{tb}\n"
                 "Posibles soluciones:\n"
                 "  1. Verifica tu conexión a internet (primera descarga)\n"
                 "  2. Asegúrate de tener suficiente espacio en disco (~2 GB)\n"
@@ -149,7 +151,7 @@ class VoiceEngine:
                 f"  4. Versión de PyTorch: {torch.__version__}"
             ) from e
 
-        print("✅ Modelo cargado exitosamente.\n")
+        print("[EXITO] Modelo cargado exitosamente.\n")
 
     def synthesize(
         self,
