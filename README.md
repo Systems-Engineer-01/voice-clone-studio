@@ -180,8 +180,39 @@ El resultado se guarda en `output/fragments.json` con esta estructura:
 - [x] **Sprint 0** — Setup inicial del proyecto
 - [x] **Sprint 1** — Prueba de concepto de clonación de voz (XTTS-v2)
 - [x] **Sprint 2** — Procesamiento de guiones (fragmentación para TTS)
-- [ ] **Sprint 3** — Pipeline completo (guion → voz clonada)
+- [x] **Sprint 3** — Pipeline completo (guion → voz clonada)
 - [ ] **Sprint 4** — Interfaz web (Gradio/Streamlit)
+
+---
+
+### Pipeline Completo (Narración de un Guion)
+
+El pipeline de narración orquesta todo el proceso: divide el guion en fragmentos, sintetiza cada fragmento y los une en un solo archivo con silencios.
+
+#### 1. Crear el archivo de referencia (una sola vez)
+Si aún no lo has hecho, convierte tus MP4 en un WAV de referencia:
+```bash
+python -m src.clone_test
+```
+
+#### 2. Escribir el guion
+Crea un archivo de texto con tu guion (ej. `scripts/mi_guion.txt`).
+
+#### 3. Generar la narración
+```bash
+python -m src.generate_narration scripts/mi_guion.txt
+```
+
+Opciones avanzadas:
+```bash
+# Cambiar la voz de referencia y formato de salida
+python -m src.generate_narration scripts/mi_guion.txt --speaker audio_samples/otra_voz.wav --format mp3
+
+# Cambiar el tiempo de silencio entre fragmentos a 500ms
+python -m src.generate_narration scripts/mi_guion.txt --silence 500
+```
+
+El resultado final se guardará en `output/narracion_final.wav` (o `.mp3`).
 
 ---
 
