@@ -13,3 +13,4 @@ torchaudio>=2.1.0
 # Audio processing
 pydub>=0.25.1
 soundfile>=0.12.1
+gradio

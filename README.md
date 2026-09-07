@@ -181,11 +181,24 @@ El resultado se guarda en `output/fragments.json` con esta estructura:
 - [x] **Sprint 1** — Prueba de concepto de clonación de voz (XTTS-v2)
 - [x] **Sprint 2** — Procesamiento de guiones (fragmentación para TTS)
 - [x] **Sprint 3** — Pipeline completo (guion → voz clonada)
-- [ ] **Sprint 4** — Interfaz web (Gradio/Streamlit)
+- [x] **Sprint 4** — Interfaz web (Gradio)
 
 ---
 
-### Pipeline Completo (Narración de un Guion)
+### Interfaz Web (Gradio)
+
+Puedes usar la aplicación web para realizar todo el proceso visualmente: subir tu audio de referencia, escribir el texto, configurar parámetros y generar/descargar la narración resultante.
+
+Para lanzar la interfaz:
+
+```bash
+python app.py
+```
+Abre tu navegador en `http://localhost:7860`.
+
+---
+
+### Pipeline Completo (CLI)
 
 El pipeline de narración orquesta todo el proceso: divide el guion en fragmentos, sintetiza cada fragmento y los une en un solo archivo con silencios.
 
