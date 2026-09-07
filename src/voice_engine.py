@@ -243,7 +243,7 @@ class VoiceEngine:
             self.synthesize(text, output_path, language, temperature, speed, repetition_penalty)
 
             size_kb = output_path.stat().st_size / 1024
-            print(f"           → {output_path.name} ({size_kb:.0f} KB)")
+            print(f"           -> {output_path.name} ({size_kb:.0f} KB)")
 
             generated.append(output_path)
 
